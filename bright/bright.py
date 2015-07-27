@@ -48,7 +48,7 @@ class Bright(object):
     def make_request(self,endpoint,method,payload=None,params={}):
         if payload:
             payload = json.dumps(payload)
-            
+
         headers = {
             'User-Agent': self.USER_AGENT,
             'Accept':'application/json',
@@ -83,10 +83,10 @@ class Bright(object):
     def me(self):
         return self.make_request('me','GET')
 
-    def me_collections(self):
+    def my_collections(self):
         return self.make_request('me/collections','GET')
 
-    def me_artworks(self):
+    def my_artworks(self):
         return self.make_request('me/artworks','GET')
 
     def me_notifications(self):
@@ -145,14 +145,14 @@ class Bright(object):
          return self.make_request(uri,'DELETE')
     
     def add_to_collection(self, collection_id, artwork_id):
-        uri = "collections/{0}/artworks".format(collection_id)
+        uri = "collections/{0}/artworks/".format(collection_id)
         data = {
             "artwork":artwork_id
         }
         return self.make_request(uri,'POST',payload=data)
 
     def remove_from_collection(self, collection_id, artwork_id):
-        uri = "collections/{0}/artworks".format(collection_id)
+        uri = "collections/{0}/artworks/".format(collection_id)
         data = {
             "artwork_id_or_slug":artwork_id
         }
