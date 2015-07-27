@@ -45,8 +45,10 @@ class Bright(object):
                                                 scope=self.scopes,
                                                 )
 
-    def make_request(self,endpoint,method,payload={},params={}):
-        payload = json.dumps(payload)
+    def make_request(self,endpoint,method,payload=None,params={}):
+        if payload:
+            payload = json.dumps(payload)
+            
         headers = {
             'User-Agent': self.USER_AGENT,
             'Accept':'application/json',
