@@ -113,6 +113,17 @@ class Bright(object):
         uri = 'artworks/{0}'.format(artwork_id)
         return self.make_request(uri,'DELETE')
 
+    def get_collection(self, collection_id):
+        uri = "collections/{0}".format(collection_id)
+        return self.make_request(uri,'GET')
 
+    def get_all_collections(self,per_page=None,page=None):
+
+        params = {
+            "page":page,
+            "per_page": per_page or 10
+            }
+
+        return self.make_request('collections/','GET', params=params)
 
     
