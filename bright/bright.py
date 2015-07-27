@@ -49,7 +49,8 @@ class Bright(object):
         payload = json.dumps(payload)
         headers = {
             'User-Agent': self.USER_AGENT,
-            'Accept':'application/json'
+            'Accept':'application/json',
+            'Content-Type':'application/json'
         }
         if method == 'GET':
             r = self.bright.get(self.api_url + endpoint, 
@@ -112,6 +113,13 @@ class Bright(object):
     def delete_artwork(self,artwork_id):
         uri = 'artworks/{0}'.format(artwork_id)
         return self.make_request(uri,'DELETE')
+
+    def create_collection(self, name, description):
+        data = {
+            'name':name,
+            'description':description
+        }
+        return self.make_request("collections/","POST",payload=data)
 
     def get_collection(self, collection_id):
         uri = "collections/{0}".format(collection_id)
