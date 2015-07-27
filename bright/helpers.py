@@ -40,7 +40,7 @@ def raise_errors_on_failure(response):
     elif response.status_code == 400:
         raise BadRequest("Incoming request body does not contain a valid JSON object.")
     elif response.status_code == 401:
-        raise AuthenticationError("Unnknown API Key. Please check your API key and try again")
+        raise AuthenticationError("Unauthorized, please check your token or your scopes.")
     elif response.status_code == 413:
         raise RequestTooLarge("File size too large.")
     elif response.status_code == 415:
