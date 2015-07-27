@@ -126,4 +126,45 @@ class Bright(object):
 
         return self.make_request('collections/','GET', params=params)
 
+    def update_collection(self, collection_id, data={}):
+        uri = "collections/{0}".format(collection_id)
+        return self.make_request(uri,'PUT', payload=data)
+
+    def delete_collection(self, collection_id):
+         uri = "collections/{0}".format(collection_id)
+         return self.make_request(uri,'DELETE')
+    
+    def add_to_collection(self, collection_id, artwork_id):
+        uri = "collections/{0}/artworks".format(collection_id)
+        data = {
+            "artwork":artwork_id
+        }
+        return self.make_request(uri,'POST',payload=data)
+
+    def remove_from_collection(self, collection_id, artwork_id):
+        uri = "collections/{0}/artworks".format(collection_id)
+        data = {
+            "artwork_id_or_slug":artwork_id
+        }
+        return self.make_request(uri,'DELETE',payload=data)
+
+    def like_collection(self, collection_id):
+        uri = "collections/{0}/like".format(collection_id)
+        return self.make_request(uri,'POST')
+
+    def unlike_collection(self, collection_id):
+        uri = "collections/{0}/unlike".format(collection_id)
+        return self.make_request(uri,'POST')
+
+    def get_user(self, user_id_or_screenname):
+        uri = "users/{0}".format(user_id_or_screenname)
+        return self.make_request(uri, 'GET')
+
+    def follow_user(self, user_id_or_screenname):
+        uri = "users/{0}/follow".format(user_id_or_screenname)
+        return self.make_request(uri, 'POST')
+
+    def unfollow_user(self, user_id_or_screenname):
+        uri = "users/{0}/unfollow".format(user_id_or_screenname)
+        return self.make_request(uri, 'POST')
     
