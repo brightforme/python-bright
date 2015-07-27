@@ -10,7 +10,7 @@ class Bright(object):
     api_url = "https://api.brightfor.me/v1/"
     host = "api.brightfor.me"
     __version__ = '0.0.1'
-    USER_AGENT = 'BRIGHT Python API Wrapper {0}'.format(__version__)
+    USER_AGENT = 'python-bright v{0}'.format(__version__)
 
     
     def __init__(self,**kwargs):
