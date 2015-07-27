@@ -21,7 +21,7 @@ Method by hand: download the sources, either on PyPI or (if you want the develop
 
 ### User Credentials Flow
 
-```
+```python
 from bright import Bright
 api = Bright(client_id=YOUR_CLIENT_ID,
 			username='john@example.com',
