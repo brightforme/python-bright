@@ -1,6 +1,6 @@
 import requests
 import json
-from oauthlib.oauth2 import LegacyApplicationClient
+from oauthlib.oauth2 import LegacyApplicationClient, BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 from .helpers import raise_errors_on_failure
 
@@ -11,7 +11,6 @@ class Bright(object):
     host = "api.brightfor.me"
     __version__ = '0.0.1'
     USER_AGENT = 'python-bright v{0}'.format(__version__)
-
     
     def __init__(self,**kwargs):
         
@@ -34,7 +33,17 @@ class Bright(object):
                         "token_type": "Bearer"
                     })
             return
-        if "username" in kwargs and "password" in kwargs:
+
+        if self._check_client_credentials_grant_type():
+            token_url = "{0}{1}/oauth/token".format(self.scheme,self.host)
+            client = BackendApplicationClient(self.client_id)
+            self.bright = OAuth2Session(client=client)
+            self.access_token = self.bright.fetch_token(token_url,
+                                                        client_id=self.client_id,
+                                                        client_secret=self.options.get('client_secret'),
+                                                        scope=self.scopes)
+
+        if self._check_password_grant_type():
             token_url = "{0}{1}/oauth/token".format(self.scheme,self.host)
             client = LegacyApplicationClient(self.client_id)
             self.bright = OAuth2Session(client=client)
@@ -44,6 +53,17 @@ class Bright(object):
                                                 password=kwargs.get("password"),
                                                 scope=self.scopes,
                                                 )
+    
+    def _check_kwargs(self, required, kwargs):
+        return all(map(lambda k: k in kwargs, required))
+    
+    def _check_client_credentials_grant_type(self):
+        required = ('client_id', 'client_secret')
+        return self._check_kwargs(required, self.options)
+    
+    def _check_password_grant_type(self):
+        required = ('client_id', 'username', 'password')
+        return self._check_kwargs(required, self.options)
 
     def make_request(self,endpoint,method,payload=None,params={}):
         if payload:
