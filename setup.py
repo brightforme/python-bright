@@ -20,6 +20,6 @@ setup(
     classifiers = [],
     packages = find_packages(),
     include_package_data = True,
-    install_requires=['requests>=2.0.0'],
+    install_requires=['requests', 'requests-oauthlib'],
     zip_safe = False
 )
