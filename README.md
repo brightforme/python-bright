@@ -7,17 +7,31 @@ Official Bright API wrapper
 Method with pip: if you have pip installed, just type this in a terminal (sudo is optional on some systems)
 
 ```
-(sudo) pip install python-bright
+pip install python-bright
 ```
 
 Method by hand: download the sources, either on PyPI or (if you want the development version) on Github, unzip everything in one folder, open a terminal and type
 
 ```
-(sudo) python setup.py install
+python setup.py install
 ```
 
 
 ## Usage
+
+All OAuth2 authorization flows supported by the BRIGHT API are available in python-bright.
+
+### Basic Flow
+
+If you only need read-only access to public resources, simply provide a client_id and client_secret:
+
+```python
+from bright import Bright
+api = Bright(client_id=YOUR_CLIENT_ID,
+			client_secret=YOUR_CLIENT_SECRET
+)
+print(api.get_all_artworks())
+```
 
 ### User Credentials Flow
 
