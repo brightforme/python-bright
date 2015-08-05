@@ -12,7 +12,7 @@ class Bright(object):
     __version__ = '0.0.1'
     USER_AGENT = 'python-bright v{0}'.format(__version__)
     
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         
         if 'client_id' not in kwargs:
             raise TypeError("At least a client_id must be provided.")
@@ -65,7 +65,7 @@ class Bright(object):
         required = ('client_id', 'username', 'password')
         return self._check_kwargs(required, self.options)
 
-    def make_request(self,endpoint,method,payload=None,params={}):
+    def make_request(self, endpoint, method, payload=None, params={}):
         if payload:
             payload = json.dumps(payload)
 
@@ -115,8 +115,8 @@ class Bright(object):
     def update_me(self, data={}):
         return self.make_request('me','PUT',payload=data)
 
-    def get_artwork(self, artwork_id):
-        uri = "artworks/{0}".format(artwork_id)
+    def get_artwork(self, id_or_slug):
+        uri = "artworks/{0}".format(id_or_slug)
         return self.make_request(uri,'GET')
 
     def get_all_artworks(self,per_page=None,page=None):
@@ -128,12 +128,12 @@ class Bright(object):
 
         return self.make_request('artworks/','GET', params=params)
 
-    def update_artwork(self,artwork_id, data={}):
-        uri = 'artworks/{0}'.format(artwork_id)
+    def update_artwork(self, artwork_id_or_slug, data={}):
+        uri = 'artworks/{0}'.format(artwork_id_or_slug)
         return self.make_request(uri,'PUT',payload=data)
 
-    def delete_artwork(self,artwork_id):
-        uri = 'artworks/{0}'.format(artwork_id)
+    def delete_artwork(self, artwork_id_or_slug):
+        uri = 'artworks/{0}'.format(artwork_id_or_slug)
         return self.make_request(uri,'DELETE')
 
     def create_collection(self, name, description):
@@ -143,8 +143,8 @@ class Bright(object):
         }
         return self.make_request("collections/","POST",payload=data)
 
-    def get_collection(self, collection_id):
-        uri = "collections/{0}".format(collection_id)
+    def get_collection(self, collection_id_or_slug):
+        uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri,'GET')
 
     def get_all_collections(self,per_page=None,page=None):
@@ -156,31 +156,31 @@ class Bright(object):
 
         return self.make_request('collections/','GET', params=params)
 
-    def update_collection(self, collection_id, data={}):
-        uri = "collections/{0}".format(collection_id)
+    def update_collection(self, collection_id_or_slug, data={}):
+        uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri,'PUT', payload=data)
 
-    def delete_collection(self, collection_id):
-         uri = "collections/{0}".format(collection_id)
+    def delete_collection(self, collection_id_or_slug):
+         uri = "collections/{0}".format(collection_id_or_slug)
          return self.make_request(uri,'DELETE')
     
-    def add_to_collection(self, collection_id, artwork_id):
-        uri = "collections/{0}/artworks/".format(collection_id)
+    def add_to_collection(self, collection_id_or_slug, artwork_id):
+        uri = "collections/{0}/artworks/".format(collection_id_or_slug)
         data = {
             "artwork":artwork_id
         }
         return self.make_request(uri,'POST',payload=data)
 
-    def remove_from_collection(self, collection_id, artwork_id):
-        uri = "collections/{0}/artworks/{1}".format(collection_id,artwork_id)
+    def remove_from_collection(self, collection_id_or_slug, artwork_id):
+        uri = "collections/{0}/artworks/{1}".format(collection_id_or_slug, artwork_id)
         return self.make_request(uri,'DELETE')
 
-    def like_collection(self, collection_id):
-        uri = "collections/{0}/like".format(collection_id)
+    def like_collection(self, collection_id_or_slug):
+        uri = "collections/{0}/like".format(collection_id_or_slug)
         return self.make_request(uri,'POST')
 
-    def unlike_collection(self, collection_id):
-        uri = "collections/{0}/unlike".format(collection_id)
+    def unlike_collection(self, collection_id_or_slug):
+        uri = "collections/{0}/unlike".format(collection_id_or_slug)
         return self.make_request(uri,'POST')
 
     def get_user(self, user_id_or_screenname):
