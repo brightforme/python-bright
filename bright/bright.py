@@ -101,8 +101,8 @@ class Bright(object):
 
         return r.json()
 
-    def me(self):
-        return self.make_request('me','GET')
+    def me(self, embedding=None):
+        return self.make_request('me', 'GET', params=embedding)
 
     def my_collections(self):
         return self.make_request('me/collections','GET')
@@ -114,24 +114,25 @@ class Bright(object):
         return self.make_request('me/notifications','GET')
 
     def update_me(self, data={}):
-        return self.make_request('me','PUT',payload=data)
+        return self.make_request('me', 'PUT', payload=data)
 
     def get_artwork(self, id_or_slug):
         uri = "artworks/{0}".format(id_or_slug)
         return self.make_request(uri,'GET')
 
-    def get_all_artworks(self,per_page=None,page=None):
+    def get_all_artworks(self, per_page=None, page=None, embedding=None):
 
         params = {
             "page":page,
-            "per_page": per_page or 10
+            "per_page": per_page or 10,
+            "embedding":embedding
             }
 
-        return self.make_request('artworks/','GET', params=params)
+        return self.make_request('artworks/', 'GET', params=params)
 
     def update_artwork(self, artwork_id_or_slug, data={}):
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
-        return self.make_request(uri,'PUT',payload=data)
+        return self.make_request(uri, 'PUT', payload=data)
 
     def delete_artwork(self, artwork_id_or_slug):
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
@@ -142,17 +143,18 @@ class Bright(object):
             'name':name,
             'description':description
         }
-        return self.make_request("collections/","POST",payload=data)
+        return self.make_request("collections/", "POST", payload=data)
 
-    def get_collection(self, collection_id_or_slug):
+    def get_collection(self, collection_id_or_slug, embedding=None):
         uri = "collections/{0}".format(collection_id_or_slug)
-        return self.make_request(uri,'GET')
+        return self.make_request(uri, 'GET', params=embedding)
 
-    def get_all_collections(self,per_page=None,page=None):
+    def get_all_collections(self,per_page=None, page=None, embedding=None):
 
         params = {
             "page":page,
-            "per_page": per_page or 10
+            "per_page": per_page or 10,
+            "embedding":embedding
             }
 
         return self.make_request('collections/','GET', params=params)
@@ -184,9 +186,9 @@ class Bright(object):
         uri = "collections/{0}/unlike".format(collection_id_or_slug)
         return self.make_request(uri,'POST')
 
-    def get_user(self, user_id_or_screenname):
+    def get_user(self, user_id_or_screenname, embedding=None):
         uri = "users/{0}".format(user_id_or_screenname)
-        return self.make_request(uri, 'GET')
+        return self.make_request(uri, 'GET', params=embedding)
 
     def follow_user(self, user_id_or_screenname):
         uri = "users/{0}/follow".format(user_id_or_screenname)
