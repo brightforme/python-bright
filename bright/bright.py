@@ -7,7 +7,7 @@ from .helpers import raise_errors_on_failure
 
 class Bright(object):
     use_ssl = True
-    api_url = "https://api.brightfor.me/v1/"
+    api_version = "v1"
     host = "api.brightfor.me"
     __version__ = '0.0.1'
     USER_AGENT = 'python-bright v{0}'.format(__version__)
@@ -18,9 +18,10 @@ class Bright(object):
             raise TypeError("At least a client_id must be provided.")
 
         self.host = kwargs.get('host', self.host)
-        
         self.use_ssl = kwargs.get('use_ssl', self.use_ssl)
+        self.api_version = kwargs.get('api_version', self.api_version)
         self.scheme = self.use_ssl and 'https://' or 'http://'
+        self.api_url = "{0}{1}/{2}/".format(self.scheme,self.host,self.api_version) 
         self.client_id = kwargs.get('client_id')
         self.options = kwargs
         self.scopes = kwargs.get('scopes')
@@ -119,9 +120,12 @@ class Bright(object):
     def update_me(self, data={}):
         return self.make_request('me', 'PUT', payload=data)
 
-    def get_artwork(self, id_or_slug):
+    def get_artwork(self, id_or_slug, embedding=None):
         uri = "artworks/{0}".format(id_or_slug)
-        return self.make_request(uri,'GET')
+        params = {
+            "embed":embedding
+        }
+        return self.make_request(uri,'GET', params=params)
 
     def get_all_artworks(self, per_page=None, page=None, embedding=None):
 
