@@ -1,3 +1,5 @@
+import requests
+
 class BrightException(Exception):
     """ Base error. """
     def __init__(self, message, result=None):
@@ -34,24 +36,31 @@ class UnprocessableEntity(BrightException):
 class TooManyRequests(BrightException):
     pass
 
+
+def get_error_json(json):
+    return json['message']
+
 def raise_errors_on_failure(response):
+
+    msg = ""
+    if response.status_code != requests.codes.ok:
+        msg = get_error_json(response.json())
+
     if response.status_code == 404:
-        raise ResourceNotFound("Not found.")
+        raise ResourceNotFound(msg)
     elif response.status_code == 400:
-        raise BadRequest("Incoming request body does not contain a valid JSON object.")
+        raise BadRequest(msg)
     elif response.status_code == 401:
-        raise AuthenticationError("Unauthorized, please check your token or your scopes.")
-    elif response.status_code == 413:
-        raise RequestTooLarge("File size too large.")
-    elif response.status_code == 415:
-        raise FileTypeUnsupported("File type not supported.")
+        raise AuthenticationError(msg)
+    elif response.status_code == 403:
+        raise RequestTooLarge(msg)
     elif response.status_code == 429:
-        raise TooManyRequests("Overage usage limit hit.")
+        raise TooManyRequests(msg)
     elif response.status_code == 500:
-        raise ServerError("BRIGHT has encountered an unexpected error and cannot fulfill your request")
+        raise ServerError(msg)
     elif response.status_code == 502:
-        raise BadGatewayError("Bad gateway.")
+        raise BadGatewayError(msg)
     elif response.status_code == 503:
-        raise ServiceUnavailableError("Service unavailable.")
+        raise ServiceUnavailableError(msg)
 
     return response
