@@ -36,6 +36,9 @@ class UnprocessableEntity(BrightException):
 class TooManyRequests(BrightException):
     pass
 
+class Forbidden(BrightException):
+    pass
+
 
 def get_error_json(json):
     return json['message']
@@ -53,7 +56,7 @@ def raise_errors_on_failure(response):
     elif response.status_code == 401:
         raise AuthenticationError(msg)
     elif response.status_code == 403:
-        raise RequestTooLarge(msg)
+        raise Forbidden(msg)
     elif response.status_code == 429:
         raise TooManyRequests(msg)
     elif response.status_code == 500:
