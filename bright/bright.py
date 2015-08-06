@@ -1,69 +1,71 @@
-import requests
 import json
 from oauthlib.oauth2 import LegacyApplicationClient, BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 from .helpers import raise_errors_on_failure
 
+API_URL = "https://api.brightfor.me/v1/"
+HOST = "api.brightfor.me"
+__version__ = '0.0.1'
+USER_AGENT = 'python-bright v{0}'.format(__version__)
 
 class Bright(object):
-    use_ssl = True
-    api_url = "https://api.brightfor.me/v1/"
-    host = "api.brightfor.me"
-    __version__ = '0.0.1'
-    USER_AGENT = 'python-bright v{0}'.format(__version__)
-    
-    def __init__(self, **kwargs):
-        
-        if 'client_id' not in kwargs:
-            raise TypeError("At least a client_id must be provided.")
 
-        self.host = kwargs.get('host', self.host)
-        
-        self.use_ssl = kwargs.get('use_ssl', self.use_ssl)
-        self.scheme = self.use_ssl and 'https://' or 'http://'
-        self.client_id = kwargs.get('client_id')
-        self.options = kwargs
-        self.scopes = kwargs.get('scopes')
+    def __init__(self, client_id, use_ssl=True, host=HOST, scopes=None,
+                 api_url=API_URL, **kwargs):
+
+        self.client_id = client_id
+        self.host = host
+
+        self.scheme = use_ssl and 'https://' or 'http://'
+        self.api_url = api_url
+        self.scopes = scopes
         self._authorize_url = None
 
-        if "access_token" in kwargs:
-            self.access_token = kwargs.get("access_token")
+        self.options = kwargs
+
+        self.access_token = kwargs.pop("access_token", None)
+
+        if self.access_token:
             self.bright = OAuth2Session(self.client_id, token={
-                        "access_token": self.access_token, 
-                        "scope": self.scopes, 
+                        "access_token": self.access_token,
+                        "scope": self.scopes,
                         "token_type": "Bearer"
                     })
-            return
 
-        if self._check_client_credentials_grant_type():
-            token_url = "{0}{1}/oauth/token".format(self.scheme,self.host)
-            client = BackendApplicationClient(self.client_id)
-            self.bright = OAuth2Session(client=client)
-            self.access_token = self.bright.fetch_token(token_url,
-                                                        client_id=self.client_id,
-                                                        client_secret=self.options.get('client_secret'),
-                                                        scope=self.scopes)
-
-        if self._check_password_grant_type():
+        elif self._check_password_grant_type():
             token_url = "{0}{1}/oauth/token".format(self.scheme,self.host)
             client = LegacyApplicationClient(self.client_id)
             self.bright = OAuth2Session(client=client)
-            self.access_token = self.bright.fetch_token(token_url,
-                                                client_id=self.client_id,
-                                                username=kwargs.get("username"),
-                                                password=kwargs.get("password"),
-                                                scope=self.scopes,
-                                                )
-    
+            client_secret = self.options.get("client_secret", None)
+            self.access_token = self.bright.fetch_token(
+                token_url,
+                client_id=self.client_id,
+                client_secret=client_secret,
+                username=kwargs.pop("username"),
+                password=kwargs.pop("password"),
+                scope=self.scopes
+            )
+
+        elif self._check_client_credentials_grant_type():
+            token_url = "{0}{1}/oauth/token".format(self.scheme,self.host)
+            client = BackendApplicationClient(self.client_id)
+            self.bright = OAuth2Session(client=client)
+            self.access_token = self.bright.fetch_token(
+                token_url,
+                client_id=self.client_id,
+                client_secret=self.options.get('client_secret'),
+                scope=self.scopes
+            )
+
     def _check_kwargs(self, required, kwargs):
         return all(map(lambda k: k in kwargs, required))
-    
+
     def _check_client_credentials_grant_type(self):
-        required = ('client_id', 'client_secret')
+        required = ('client_secret')
         return self._check_kwargs(required, self.options)
-    
+
     def _check_password_grant_type(self):
-        required = ('client_id', 'username', 'password')
+        required = ('username', 'password')
         return self._check_kwargs(required, self.options)
 
     def make_request(self, endpoint, method, payload=None, params={}):
@@ -71,31 +73,31 @@ class Bright(object):
             payload = json.dumps(payload)
 
         headers = {
-            'User-Agent': self.USER_AGENT,
+            'User-Agent': USER_AGENT,
             'Accept':'application/json',
             'Content-Type':'application/json'
         }
         if method == 'GET':
-            r = self.bright.get(self.api_url + endpoint, 
+            r = self.bright.get(self.api_url + endpoint,
                                 params=params,
                                 headers=headers)
             r = raise_errors_on_failure(r)
         if method == 'DELETE':
-            r = self.bright.delete(self.api_url + endpoint, 
-                                    params=params, 
-                                    data=payload, 
+            r = self.bright.delete(self.api_url + endpoint,
+                                    params=params,
+                                    data=payload,
                                     headers=headers)
             r = raise_errors_on_failure(r)
         if method == 'POST':
-            r = self.bright.post(self.api_url + endpoint, 
-                                params=params, 
-                                data=payload, 
+            r = self.bright.post(self.api_url + endpoint,
+                                params=params,
+                                data=payload,
                                 headers=headers)
             r = raise_errors_on_failure(r)
         if method == 'PUT':
-            r = self.bright.put(self.api_url + endpoint, 
-                                params=params, 
-                                data=payload, 
+            r = self.bright.put(self.api_url + endpoint,
+                                params=params,
+                                data=payload,
                                 headers=headers)
             r = raise_errors_on_failure(r)
 
@@ -166,7 +168,7 @@ class Bright(object):
     def delete_collection(self, collection_id_or_slug):
          uri = "collections/{0}".format(collection_id_or_slug)
          return self.make_request(uri,'DELETE')
-    
+
     def add_to_collection(self, collection_id_or_slug, artwork_id):
         uri = "collections/{0}/artworks/".format(collection_id_or_slug)
         data = {
@@ -197,4 +199,4 @@ class Bright(object):
     def unfollow_user(self, user_id_or_screenname):
         uri = "users/{0}/unfollow".format(user_id_or_screenname)
         return self.make_request(uri, 'POST')
-    
+
