@@ -102,7 +102,10 @@ class Bright(object):
         return r.json()
 
     def me(self, embedding=None):
-        return self.make_request('me', 'GET', params=embedding)
+        params = {
+            "embedding":embedding
+        }
+        return self.make_request('me', 'GET', params=params)
 
     def my_collections(self):
         return self.make_request('me/collections','GET')
@@ -188,7 +191,10 @@ class Bright(object):
 
     def get_user(self, user_id_or_screenname, embedding=None):
         uri = "users/{0}".format(user_id_or_screenname)
-        return self.make_request(uri, 'GET', params=embedding)
+        params = {
+            "embedding":embedding
+        }
+        return self.make_request(uri, 'GET', params=params)
 
     def follow_user(self, user_id_or_screenname):
         uri = "users/{0}/follow".format(user_id_or_screenname)
