@@ -18,10 +18,11 @@ class Bright(object):
             raise TypeError("At least a client_id must be provided.")
 
         self.host = kwargs.get('host', self.host)
-        self.scheme = self.use_ssl and 'https://' or 'http://'
+        
         self.use_ssl = kwargs.get('use_ssl', self.use_ssl)
-        self.options = kwargs
+        self.scheme = self.use_ssl and 'https://' or 'http://'
         self.client_id = kwargs.get('client_id')
+        self.options = kwargs
         self.scopes = kwargs.get('scopes')
         self._authorize_url = None
 
