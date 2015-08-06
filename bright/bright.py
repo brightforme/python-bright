@@ -103,7 +103,7 @@ class Bright(object):
 
     def me(self, embedding=None):
         params = {
-            "embedding":embedding
+            "embed":embedding
         }
         return self.make_request('me', 'GET', params=params)
 
@@ -128,7 +128,7 @@ class Bright(object):
         params = {
             "page":page,
             "per_page": per_page or 10,
-            "embedding":embedding
+            "embed":embedding
             }
 
         return self.make_request('artworks/', 'GET', params=params)
@@ -157,7 +157,7 @@ class Bright(object):
         params = {
             "page":page,
             "per_page": per_page or 10,
-            "embedding":embedding
+            "embed":embedding
             }
 
         return self.make_request('collections/','GET', params=params)
@@ -192,7 +192,7 @@ class Bright(object):
     def get_user(self, user_id_or_screenname, embedding=None):
         uri = "users/{0}".format(user_id_or_screenname)
         params = {
-            "embedding":embedding
+            "embed":embedding
         }
         return self.make_request(uri, 'GET', params=params)
 
