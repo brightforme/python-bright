@@ -121,7 +121,7 @@ class Bright(object):
         params = {
             "embed":embedding
         }
-        return self.make_request('me', 'GET', params=params)
+        return self.make_request('me/', 'GET', params=params)
 
     def my_collections(self):
         return self.make_request('me/collections', 'GET')
