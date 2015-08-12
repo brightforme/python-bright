@@ -69,6 +69,15 @@ class Bright(object):
         required = ('client_id', 'username', 'password')
         return self._check_kwargs(required, self.options)
 
+    def revoke(self):
+        revoke_token_url = "{0}{1}/oauth/revoke".format(self.scheme, self.host)
+        data = { 
+                'token':self.access_token['access_token'],
+                'token_type_hint':"access_token"
+        }
+        r = self.bright.post(revoke_token_url, data=data)
+        return r.json()
+
     def make_request(self, endpoint, method, payload=None, params={}):
         if payload:
             payload = json.dumps(payload)
