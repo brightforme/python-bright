@@ -46,7 +46,7 @@ def get_error_json(json):
 def raise_errors_on_failure(response):
 
     msg = ""
-    if response.status_code != requests.codes.ok:
+    if not str(response.status_code).startswith('2'):
         msg = get_error_json(response.json())
 
     if response.status_code == 404:
