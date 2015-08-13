@@ -129,7 +129,7 @@ class Bright(object):
         return self.make_request('me/notifications','GET')
 
     def update_me(self, data={}):
-        return self.make_request('me', 'PUT', payload=data)
+        return self.make_request('me/', 'PUT', payload=data)
 
     def get_artwork(self, id_or_slug, embedding=None):
         uri = "artworks/{0}".format(id_or_slug)
