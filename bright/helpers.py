@@ -45,7 +45,15 @@ def get_error_json(json):
 
 def raise_errors_on_failure(response):
 
+    if response.status_code == 500:
+        raise ServerError("Internal Server Error")
+    elif response.status_code == 502:
+        raise BadGatewayError("Bad Gateway")
+    elif response.status_code == 503:
+        raise ServiceUnavailableError("Service is unvailable")
+
     msg = ""
+
     if not str(response.status_code).startswith('2'):
         msg = get_error_json(response.json())
 
@@ -59,11 +67,5 @@ def raise_errors_on_failure(response):
         raise Forbidden(msg)
     elif response.status_code == 429:
         raise TooManyRequests(msg)
-    elif response.status_code == 500:
-        raise ServerError(msg)
-    elif response.status_code == 502:
-        raise BadGatewayError(msg)
-    elif response.status_code == 503:
-        raise ServiceUnavailableError(msg)
 
     return response
