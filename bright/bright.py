@@ -76,6 +76,8 @@ class Bright(object):
                 'token_type_hint':"access_token"
         }
         r = self.bright.post(revoke_token_url, data=data)
+        r = raise_errors_on_failure(r)
+        
         return r.json()
 
     def make_request(self, endpoint, method, payload=None, params={}):
