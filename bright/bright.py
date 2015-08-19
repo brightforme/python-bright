@@ -133,10 +133,11 @@ class Bright(object):
     def update_me(self, data={}):
         return self.make_request('me/', 'PUT', payload=data)
 
-    def get_artwork(self, id_or_slug, embedding=None):
+    def get_artwork(self, id_or_slug, embedding=None, counts=None):
         uri = "artworks/{0}".format(id_or_slug)
         params = {
-            "embed":embedding
+            "embed":embedding,
+            "counts": counts
         }
         return self.make_request(uri,'GET', params=params)
 
@@ -206,10 +207,11 @@ class Bright(object):
         uri = "collections/{0}/unlike".format(collection_id_or_slug)
         return self.make_request(uri,'POST')
 
-    def get_user(self, user_id_or_screenname, embedding=None):
+    def get_user(self, user_id_or_screenname, embedding=None, counts=None):
         uri = "users/{0}".format(user_id_or_screenname)
         params = {
-            "embed":embedding
+            "embed": embedding,
+            "counts": counts
         }
         return self.make_request(uri, 'GET', params=params)
 
