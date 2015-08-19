@@ -47,7 +47,7 @@ class Bright(object):
                                                         username=kwargs.get("username"),
                                                         password=kwargs.get("password"),
                                                         scope=self.scopes,
-                                                        )
+                                                       )
 
         elif self._check_client_credentials_grant_type():
             token_url = "{0}{1}/oauth/token".format(self.scheme, self.host)
@@ -71,16 +71,18 @@ class Bright(object):
 
     def revoke(self):
         revoke_token_url = "{0}{1}/oauth/revoke".format(self.scheme, self.host)
-        data = { 
-                'token':self.access_token['access_token'],
-                'token_type_hint':"access_token"
+        data = {
+                'token': self.access_token['access_token'],
+                'token_type_hint': "access_token"
         }
         r = self.bright.post(revoke_token_url, data=data)
         r = raise_errors_on_failure(r)
-        
+
         return r.json()
 
-    def make_request(self, endpoint, method, payload=None, params={}):
+    def make_request(self, endpoint, method, payload=None, params=None):
+        if params is None:
+            params = {}
         if payload:
             payload = json.dumps(payload)
 
@@ -122,13 +124,13 @@ class Bright(object):
         return self.make_request('me', 'GET', params=params)
 
     def my_collections(self):
-        return self.make_request('me/collections','GET')
+        return self.make_request('me/collections', 'GET')
 
     def my_artworks(self):
-        return self.make_request('me/artworks','GET')
+        return self.make_request('me/artworks', 'GET')
 
     def me_notifications(self):
-        return self.make_request('me/notifications','GET')
+        return self.make_request('me/notifications', 'GET')
 
     def update_me(self, data={}):
         return self.make_request('me/', 'PUT', payload=data)
@@ -139,19 +141,21 @@ class Bright(object):
             "embed":embedding,
             "counts": counts
         }
-        return self.make_request(uri,'GET', params=params)
+        return self.make_request(uri, 'GET', params=params)
 
     def get_all_artworks(self, per_page=None, page=None, embedding=None):
 
         params = {
-            "page":page,
+            "page": page,
             "per_page": per_page or 10,
-            "embed":embedding
-            }
+            "embed": embedding
+        }
 
         return self.make_request('artworks/', 'GET', params=params)
 
-    def update_artwork(self, artwork_id_or_slug, data={}):
+    def update_artwork(self, artwork_id_or_slug, data=None):
+        if data is None:
+            data = {}
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
         return self.make_request(uri, 'PUT', payload=data)
 
@@ -180,32 +184,34 @@ class Bright(object):
 
         return self.make_request('collections/','GET', params=params)
 
-    def update_collection(self, collection_id_or_slug, data={}):
+    def update_collection(self, collection_id_or_slug, data=None):
+        if data is None:
+            data = {}
         uri = "collections/{0}".format(collection_id_or_slug)
-        return self.make_request(uri,'PUT', payload=data)
+        return self.make_request(uri, 'PUT', payload=data)
 
     def delete_collection(self, collection_id_or_slug):
-         uri = "collections/{0}".format(collection_id_or_slug)
-         return self.make_request(uri,'DELETE')
+        uri = "collections/{0}".format(collection_id_or_slug)
+        return self.make_request(uri, 'DELETE')
 
     def add_to_collection(self, collection_id_or_slug, artwork_id):
         uri = "collections/{0}/artworks/".format(collection_id_or_slug)
         data = {
-            "artwork":artwork_id
+            "artwork": artwork_id
         }
-        return self.make_request(uri,'POST',payload=data)
+        return self.make_request(uri, 'POST',payload=data)
 
     def remove_from_collection(self, collection_id_or_slug, artwork_id):
         uri = "collections/{0}/artworks/{1}".format(collection_id_or_slug, artwork_id)
-        return self.make_request(uri,'DELETE')
+        return self.make_request(uri, 'DELETE')
 
     def like_collection(self, collection_id_or_slug):
         uri = "collections/{0}/like".format(collection_id_or_slug)
-        return self.make_request(uri,'POST')
+        return self.make_request(uri, 'POST')
 
     def unlike_collection(self, collection_id_or_slug):
         uri = "collections/{0}/unlike".format(collection_id_or_slug)
-        return self.make_request(uri,'POST')
+        return self.make_request(uri, 'POST')
 
     def get_user(self, user_id_or_screenname, embedding=None, counts=None):
         uri = "users/{0}".format(user_id_or_screenname)
