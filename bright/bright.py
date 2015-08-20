@@ -1,7 +1,10 @@
 import requests
 import json
+
 from oauthlib.oauth2 import LegacyApplicationClient, BackendApplicationClient
 from requests_oauthlib import OAuth2Session
+from requests.exceptions import HTTPError
+
 from .helpers import raise_errors_on_failure
 
 
@@ -12,20 +15,19 @@ class Bright(object):
     __version__ = '0.0.1'
     USER_AGENT = 'python-bright v{0}'.format(__version__)
 
-    def __init__(self, **kwargs):
+    def __init__(self, client_id, **kwargs):
+        self.client_id = client_id
+        self.host = kwargs.pop('host', self.host)
+        self.use_ssl = kwargs.pop('use_ssl', self.use_ssl)
+        self.api_version = kwargs.pop('api_version', self.api_version)
 
-        if 'client_id' not in kwargs:
-            raise TypeError("At least a client_id must be provided.")
-
-        self.host = kwargs.get('host', self.host)
-        self.use_ssl = kwargs.get('use_ssl', self.use_ssl)
-        self.api_version = kwargs.get('api_version', self.api_version)
         self.scheme = self.use_ssl and 'https://' or 'http://'
         self.api_url = "{0}{1}/{2}/".format(self.scheme, self.host,
                                             self.api_version)
-        self.client_id = kwargs.get('client_id')
+
+        self.scopes = kwargs.pop('scopes', None)
+
         self.options = kwargs
-        self.scopes = kwargs.get('scopes')
         self._authorize_url = None
 
         if "access_token" in kwargs:
@@ -41,32 +43,40 @@ class Bright(object):
             token_url = "{0}{1}/oauth/token".format(self.scheme, self.host)
             client = LegacyApplicationClient(self.client_id)
             self.bright = OAuth2Session(client=client)
-            self.access_token = self.bright.fetch_token(token_url,
+            try:
+                self.access_token = self.bright.fetch_token(token_url,
                                                         client_id=self.client_id,
                                                         client_secret=self.options.get("client_secret"),
                                                         username=kwargs.get("username"),
                                                         password=kwargs.get("password"),
                                                         scope=self.scopes,
                                                        )
+            except HTTPError as e:
+                raise_errors_on_failure(e.response)
+
 
         elif self._check_client_credentials_grant_type():
             token_url = "{0}{1}/oauth/token".format(self.scheme, self.host)
             client = BackendApplicationClient(self.client_id)
             self.bright = OAuth2Session(client=client)
-            self.access_token = self.bright.fetch_token(token_url,
-                                                        client_id=self.client_id,
-                                                        client_secret=self.options.get('client_secret'),
-                                                        scope=self.scopes)
+            try:
+                self.access_token = self.bright.fetch_token(token_url,
+                                                            client_id=self.client_id,
+                                                            client_secret=self.options.get('client_secret'),
+                                                            scope=self.scopes)
+            except HTTPError as e:
+                raise_errors_on_failure(e.response)
+
 
     def _check_kwargs(self, required, kwargs):
         return all(map(lambda k: k in kwargs, required))
 
     def _check_client_credentials_grant_type(self):
-        required = ('client_id', 'client_secret')
+        required = ('client_secret', )
         return self._check_kwargs(required, self.options)
 
     def _check_password_grant_type(self):
-        required = ('client_id', 'username', 'password')
+        required = ('username', 'password')
         return self._check_kwargs(required, self.options)
 
     def revoke(self):

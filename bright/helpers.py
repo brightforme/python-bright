@@ -1,50 +1,50 @@
-import requests
-
 class BrightException(Exception):
+    code = 0
+
     """ Base error. """
     def __init__(self, message, result=None):
         super(BrightException, self).__init__(message)
         self.result = result
 
 class BadRequest(BrightException):
-    pass
+    code = 400
 
 class AuthenticationError(BrightException):
-    pass
-
-class BadGatewayError(BrightException):
-    pass
-
-class ResourceNotFound(BrightException):
-    pass
-
-class ServerError(BrightException):
-    pass
-
-class ServiceUnavailableError(BrightException):
-    pass
-
-class RequestTooLarge(BrightException):
-    pass
-
-class FileTypeUnsupported(BrightException):
-    pass
-
-class UnprocessableEntity(BrightException):
-    pass
-
-class TooManyRequests(BrightException):
-    pass
+    code = 401
 
 class Forbidden(BrightException):
-    pass
+    code = 403
+
+class TooManyRequests(BrightException):
+    code = 429
+
+class ResourceNotFound(BrightException):
+    code = 404
+
+class ServerError(BrightException):
+    code = 500
+
+class BadGatewayError(BrightException):
+    code = 502
+
+class ServiceUnavailableError(BrightException):
+    code = 503
 
 
-def get_error_json(json):
-    return json['message']
+def get_error(response):
+    try:
+        json = response.json()
+        if "message" in json:
+            return json['message']
+        if "error" in json:
+            return json["error"]
+    except ValueError:
+        pass
+
+    return ''
+
 
 def raise_errors_on_failure(response):
-
     if response.status_code == 500:
         raise ServerError("Internal Server Error")
     elif response.status_code == 502:
@@ -55,7 +55,7 @@ def raise_errors_on_failure(response):
     msg = ""
 
     if not str(response.status_code).startswith('2'):
-        msg = get_error_json(response.json())
+        msg = get_error(response)
 
     if response.status_code == 404:
         raise ResourceNotFound(msg)
