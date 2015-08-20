@@ -1,6 +1,4 @@
 class BrightException(Exception):
-    code = 0
-
     """ Base error. """
     def __init__(self, message, result=None):
         super(BrightException, self).__init__(message)
