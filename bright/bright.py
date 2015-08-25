@@ -239,3 +239,7 @@ class Bright(object):
         uri = "users/{0}/unfollow".format(user_id_or_screenname)
         return self.make_request(uri, 'POST')
 
+    def get_file(self, file_id):
+        uri = "files/{0}".format(file_id)
+        return self.make_request(uri, 'GET')
+
