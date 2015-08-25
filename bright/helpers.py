@@ -1,8 +1,12 @@
 class BrightException(Exception):
     """ Base error. """
+    code = None
+
     def __init__(self, message, result=None):
         super(BrightException, self).__init__(message)
         self.result = result
+        if message:
+            self.message = message
 
 class BadRequest(BrightException):
     code = 400
@@ -21,12 +25,15 @@ class ResourceNotFound(BrightException):
 
 class ServerError(BrightException):
     code = 500
+    message = "Internal Server Error"
 
 class BadGatewayError(BrightException):
     code = 502
+    message = "Bad Gateway"
 
 class ServiceUnavailableError(BrightException):
     code = 503
+    message = "Service is unavailable"
 
 
 def get_error(response):
@@ -43,27 +50,37 @@ def get_error(response):
 
 
 def raise_errors_on_failure(response):
-    if response.status_code == 500:
-        raise ServerError("Internal Server Error")
-    elif response.status_code == 502:
-        raise BadGatewayError("Bad Gateway")
-    elif response.status_code == 503:
-        raise ServiceUnavailableError("Service is unvailable")
-
-    msg = ""
-
     if response.status_code >= 400:
         msg = get_error(response)
-
-    if response.status_code == 404:
-        raise ResourceNotFound(msg)
-    elif response.status_code == 400:
-        raise BadRequest(msg)
-    elif response.status_code == 401:
-        raise AuthenticationError(msg)
-    elif response.status_code == 403:
-        raise Forbidden(msg)
-    elif response.status_code == 429:
-        raise TooManyRequests(msg)
+        search_for_exception(response.status_code, msg)
 
     return response
+
+# The code that follows is stolen from werkzeug:
+# https://github.com/mitsuhiko/werkzeug/blob/d4e8b3f46c51e7374388791282e66323f64b3068/werkzeug/exceptions.py
+
+_exceptions = {}
+__all__ = ['BrightException',
+           'raise_errors_on_failure']
+
+def _find_exceptions():
+    for name, obj in globals().items():
+        try:
+            is_http_exception = issubclass(obj, BrightException)
+        except TypeError:
+            is_http_exception = False
+        if not is_http_exception or obj.code is None:
+            continue
+        __all__.append(obj.__name__)
+        old_obj = _exceptions.get(obj.code, None)
+        if old_obj is not None and issubclass(obj, old_obj):
+            continue
+        _exceptions[obj.code] = obj
+
+_find_exceptions()
+del _find_exceptions
+
+def search_for_exception(code, msg):
+        if code not in _exceptions:
+            raise LookupError('no exception for %r' % code)
+        raise _exceptions[code](msg)
