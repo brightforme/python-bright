@@ -1,5 +1,7 @@
 class BrightException(Exception):
     """ Base error. """
+    code = None
+
     def __init__(self, message, result=None):
         super(BrightException, self).__init__(message)
         self.result = result
@@ -50,7 +52,7 @@ def get_error(response):
 def raise_errors_on_failure(response):
     if response.status_code >= 400:
         msg = get_error(response)
-        search_for_exception(code, msg)
+        search_for_exception(response.status_code, msg)
 
     return response
 
@@ -58,10 +60,11 @@ def raise_errors_on_failure(response):
 # https://github.com/mitsuhiko/werkzeug/blob/d4e8b3f46c51e7374388791282e66323f64b3068/werkzeug/exceptions.py
 
 _exceptions = {}
-__all__ = ['BrightException']
+__all__ = ['BrightException',
+           'raise_errors_on_failure']
 
 def _find_exceptions():
-    for name, obj in iteritems(globals()):
+    for name, obj in globals().items():
         try:
             is_http_exception = issubclass(obj, BrightException)
         except TypeError:
@@ -69,15 +72,15 @@ def _find_exceptions():
         if not is_http_exception or obj.code is None:
             continue
         __all__.append(obj.__name__)
-        old_obj = default_exceptions.get(obj.code, None)
+        old_obj = _exceptions.get(obj.code, None)
         if old_obj is not None and issubclass(obj, old_obj):
             continue
-        default_exceptions[obj.code] = obj
+        _exceptions[obj.code] = obj
 
 _find_exceptions()
 del _find_exceptions
 
-def search_for_exception(self, code, msg):
+def search_for_exception(code, msg):
         if code not in _exceptions:
             raise LookupError('no exception for %r' % code)
         raise _exceptions[code](msg)
