@@ -90,7 +90,7 @@ class Bright(object):
 
         return r.json()
 
-    def make_request(self, endpoint, method, payload=None, params=None):
+    def make_request(self, endpoint, method, payload=None, params=None, allow_redirects=True):
         if params is None:
             params = {}
         if payload:
@@ -104,25 +104,29 @@ class Bright(object):
         if method == 'GET':
             r = self.bright.get(self.api_url + endpoint,
                                 params=params,
-                                headers=headers)
+                                headers=headers,
+                                allow_redirects=allow_redirects)
             r = raise_errors_on_failure(r)
         elif method == 'DELETE':
             r = self.bright.delete(self.api_url + endpoint,
                                    params=params,
                                    data=payload,
-                                   headers=headers)
+                                   headers=headers,
+                                   allow_redirects=allow_redirects)
             r = raise_errors_on_failure(r)
         elif method == 'POST':
             r = self.bright.post(self.api_url + endpoint,
                                  params=params,
                                  data=payload,
-                                 headers=headers)
+                                 headers=headers,
+                                 allow_redirects=allow_redirects)
             r = raise_errors_on_failure(r)
         elif method == 'PUT':
             r = self.bright.put(self.api_url + endpoint,
                                 params=params,
                                 data=payload,
-                                headers=headers)
+                                headers=headers,
+                                allow_redirects=allow_redirects)
             r = raise_errors_on_failure(r)
 
         return r.json()
@@ -241,5 +245,5 @@ class Bright(object):
 
     def get_file(self, file_id):
         uri = "files/{0}".format(file_id)
-        return self.make_request(uri, 'GET')
+        return self.make_request(uri, 'GET', allow_redirects=False)
 

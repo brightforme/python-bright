@@ -52,8 +52,7 @@ def raise_errors_on_failure(response):
 
     msg = ""
 
-    if not str(response.status_code).startswith('2') \
-        or not str(response.status_code).startswith('3'):
+    if response.status_code >= 400:
         msg = get_error(response)
 
     if response.status_code == 404:
