@@ -9,7 +9,7 @@ with open('README.rst') as readme:
 
 setup(
     name = "python-bright",
-    version = "0.0.1",
+    version = "0.0.2",
     description = "BRIGHT API wrapper",
     long_description = long_description,
     author = "Martin-Zack Mekkaoui",
