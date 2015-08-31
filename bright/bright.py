@@ -246,3 +246,7 @@ class Bright(object):
         uri = "files/{0}".format(file_id)
         return self.make_request(uri, 'GET', allow_redirects=False)
 
+    def get_flow(self, from_=None):
+        params = from_ and {"from": from_} or {}
+        return self.make_request("artworks/flow", 'GET', params=params)
+
