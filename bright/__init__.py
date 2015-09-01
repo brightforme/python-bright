@@ -1,6 +1,6 @@
 from .bright import Bright
 
-__version__ = "0.0.3"
+__version__ = Bright.__version__
 __descr__ = "BRIGHT API wrapper"
 __author__ = "Martin-Zack Mekkaoui"
 __author_mail__ = "martin@brightfor.me"
