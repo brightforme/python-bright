@@ -4,6 +4,7 @@ import json
 from oauthlib.oauth2 import LegacyApplicationClient, BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
+from functools import reduce
 
 from .helpers import raise_errors_on_failure
 
@@ -69,7 +70,7 @@ class Bright(object):
 
 
     def _check_kwargs(self, required, kwargs):
-        return reduce(lambda k, acc: k in kwargs and acc, required, True)
+        return reduce(lambda acc, k: k in kwargs and acc, required, True)
 
     def _check_client_credentials_grant_type(self):
         required = ('client_secret', )
