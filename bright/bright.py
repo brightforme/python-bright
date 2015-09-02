@@ -4,6 +4,7 @@ import json
 from oauthlib.oauth2 import LegacyApplicationClient, BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
+from functools import reduce
 
 from .helpers import raise_errors_on_failure
 
@@ -12,7 +13,7 @@ class Bright(object):
     use_ssl = True
     api_version = "v1"
     host = "api.brightfor.me"
-    __version__ = '0.0.1'
+    __version__ = "0.0.4"
     USER_AGENT = 'python-bright v{0}'.format(__version__)
 
     def __init__(self, client_id, **kwargs):
@@ -69,7 +70,7 @@ class Bright(object):
 
 
     def _check_kwargs(self, required, kwargs):
-        return all(map(lambda k: k in kwargs, required))
+        return reduce(lambda acc, k: k in kwargs and acc, required, True)
 
     def _check_client_credentials_grant_type(self):
         required = ('client_secret', )
@@ -133,7 +134,7 @@ class Bright(object):
 
     def me(self, embedding=None):
         params = {
-            "embed":embedding
+            "embed": embedding
         }
         return self.make_request('me/', 'GET', params=params)
 
@@ -146,25 +147,25 @@ class Bright(object):
     def me_notifications(self):
         return self.make_request('me/notifications', 'GET')
 
-    def update_me(self, data={}):
+    def update_me(self, data=None):
+        if data is None:
+            data = {}
         return self.make_request('me/', 'PUT', payload=data)
 
     def get_artwork(self, id_or_slug, embedding=None, counts=None):
         uri = "artworks/{0}".format(id_or_slug)
         params = {
-            "embed":embedding,
+            "embed": embedding,
             "counts": counts
         }
         return self.make_request(uri, 'GET', params=params)
 
     def get_all_artworks(self, per_page=None, page=None, embedding=None):
-
         params = {
             "page": page,
             "per_page": per_page or 10,
             "embed": embedding
         }
-
         return self.make_request('artworks/', 'GET', params=params)
 
     def update_artwork(self, artwork_id_or_slug, data=None):
@@ -179,8 +180,8 @@ class Bright(object):
 
     def create_collection(self, name, description):
         data = {
-            'name':name,
-            'description':description
+            'name': name,
+            'description': description
         }
         return self.make_request("collections/", "POST", payload=data)
 
@@ -189,13 +190,11 @@ class Bright(object):
         return self.make_request(uri, 'GET', params=embedding)
 
     def get_all_collections(self,per_page=None, page=None, embedding=None):
-
         params = {
-            "page":page,
+            "page": page,
             "per_page": per_page or 10,
-            "embed":embedding
+            "embed": embedding
             }
-
         return self.make_request('collections/','GET', params=params)
 
     def update_collection(self, collection_id_or_slug, data=None):
@@ -246,4 +245,8 @@ class Bright(object):
     def get_file(self, file_id):
         uri = "files/{0}".format(file_id)
         return self.make_request(uri, 'GET', allow_redirects=False)
+
+    def get_flow(self, from_=None):
+        params = from_ and {"from": from_} or {}
+        return self.make_request("artworks/flow", 'GET', params=params)
 
