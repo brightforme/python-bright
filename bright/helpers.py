@@ -23,6 +23,9 @@ class TooManyRequests(BrightException):
 class ResourceNotFound(BrightException):
     code = 404
 
+class MethodNotAllowed(BrightException):
+    code = 405
+
 class ServerError(BrightException):
     code = 500
     message = "Internal Server Error"
