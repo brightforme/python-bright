@@ -226,6 +226,9 @@ class Bright(object):
         uri = "collections/{0}/unlike".format(collection_id_or_slug)
         return self.make_request(uri, 'POST')
 
+    def add_beta_mail_address(self, address):
+        return self.make_request("beta_request", 'POST')
+
     def get_user(self, user_id_or_screenname, embedding=None, counts=None):
         uri = "users/{0}".format(user_id_or_screenname)
         params = {
