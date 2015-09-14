@@ -230,7 +230,7 @@ class Bright(object):
         data = {
             'email': address
         }
-        return self.make_request("beta_request", 'POST', payload=data)
+        return self.make_request("beta/mail", 'POST', payload=data)
 
     def get_user(self, user_id_or_screenname, embedding=None, counts=None):
         uri = "users/{0}".format(user_id_or_screenname)
