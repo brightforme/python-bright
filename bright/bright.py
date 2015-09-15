@@ -13,7 +13,7 @@ class Bright(object):
     use_ssl = True
     api_version = "v1"
     host = "api.brightfor.me"
-    __version__ = "0.0.4"
+    __version__ = "0.0.5"
     USER_AGENT = 'python-bright v{0}'.format(__version__)
 
     def __init__(self, client_id, **kwargs):
