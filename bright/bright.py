@@ -138,11 +138,17 @@ class Bright(object):
         }
         return self.make_request('me/', 'GET', params=params)
 
-    def my_collections(self):
-        return self.make_request('me/collections', 'GET')
+    def my_collections(self, embedding=None):
+        params = {
+            "embed": embedding
+        }
+        return self.make_request('me/collections', 'GET', params=params)
 
-    def my_artworks(self):
-        return self.make_request('me/artworks', 'GET')
+    def my_artworks(self, embedding=None):
+        params = {
+            "embed": embedding
+        }
+        return self.make_request('me/artworks', 'GET', params=params)
 
     def me_notifications(self):
         return self.make_request('me/notifications', 'GET')
