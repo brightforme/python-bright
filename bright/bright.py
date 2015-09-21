@@ -144,8 +144,10 @@ class Bright(object):
         }
         return self.make_request('me/collections', 'GET', params=params)
 
-    def my_artworks(self, embedding=None):
+    def my_artworks(self, embedding=None, per_page=None, page=None):
         params = {
+            "page": page,
+            "per_page": per_page or 10,
             "embed": embedding
         }
         return self.make_request('me/artworks', 'GET', params=params)
