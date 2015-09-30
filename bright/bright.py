@@ -158,6 +158,7 @@ class Bright(object):
     def update_me(self, data=None):
         if data is None:
             data = {}
+        data = {'user': data}
         return self.make_request('me/', 'PUT', payload=data)
 
     def get_artwork(self, id_or_slug, embedding=None, counts=None):
@@ -179,6 +180,7 @@ class Bright(object):
     def update_artwork(self, artwork_id_or_slug, data=None):
         if data is None:
             data = {}
+        data = {'artwork': data}
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
         return self.make_request(uri, 'PUT', payload=data)
 
@@ -188,8 +190,10 @@ class Bright(object):
 
     def create_collection(self, name, description):
         data = {
-            'name': name,
-            'description': description
+            'collection': {
+                'name': name,
+                'description': description
+             }
         }
         return self.make_request("collections/", "POST", payload=data)
 
@@ -208,6 +212,7 @@ class Bright(object):
     def update_collection(self, collection_id_or_slug, data=None):
         if data is None:
             data = {}
+        data = { 'collection': data }
         uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri, 'PUT', payload=data)
 
