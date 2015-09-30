@@ -188,11 +188,12 @@ class Bright(object):
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
         return self.make_request(uri,'DELETE')
 
-    def create_collection(self, name, description):
+    def create_collection(self, name, description, category):
         data = {
             'collection': {
                 'name': name,
-                'description': description
+                'description': description,
+                'category': category
              }
         }
         return self.make_request("collections/", "POST", payload=data)
