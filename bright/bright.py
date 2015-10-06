@@ -102,6 +102,7 @@ class Bright(object):
             'Accept':'application/json',
             'Content-Type':'application/json'
         }
+        r = {}
         if method == 'GET':
             r = self.bright.get(self.api_url + endpoint,
                                 params=params,
