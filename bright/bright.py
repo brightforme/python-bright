@@ -12,7 +12,7 @@ from .__version__ import VERSION
 
 class Bright(object):
     use_ssl = True
-    api_version = "v1"
+    api_version = "v1.1"
     host = "api.brightfor.me"
     USER_AGENT = 'python-bright'
 
