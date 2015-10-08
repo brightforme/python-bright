@@ -1,6 +1,6 @@
-from .bright import Bright
+from .__version__ import VERSION
 
-__version__ = Bright.__version__
+__version__ = VERSION
 __descr__ = "BRIGHT API wrapper"
 __author__ = "Martin-Zack Mekkaoui"
 __author_mail__ = "martin@brightfor.me"

@@ -7,13 +7,14 @@ from requests.exceptions import HTTPError
 from functools import reduce
 
 from .helpers import raise_errors_on_failure
+from .__version__ import VERSION
 
 
 class Bright(object):
     use_ssl = True
     api_version = "v1"
     host = "api.brightfor.me"
-    __version__ = "0.0.5"
+    __version__ = VERSION
     USER_AGENT = 'python-bright v{0}'.format(__version__)
 
     def __init__(self, client_id, **kwargs):
