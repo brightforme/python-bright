@@ -189,7 +189,7 @@ class Bright(object):
     def create_collection(self, name, description, category):
         data = {
             'name': name,
-            'description': description
+            'description': description,
             'is_private': category
         }
         return self.make_request("collections/", "POST", payload=data)
