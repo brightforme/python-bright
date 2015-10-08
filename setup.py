@@ -22,6 +22,8 @@ setup(
     classifiers = bright.__classifiers__,
     packages = find_packages(),
     include_package_data = True,
-    install_requires=['requests>=2.7.0', 'requests-oauthlib>=0.5.0'],
+    install_requires=['requests>=2.7.0', 
+                      'oauthlib',
+                      'requests-oauthlib>=0.5.0'],
     zip_safe = False
 )
