@@ -193,7 +193,7 @@ class Bright(object):
             'collection': {
                 'name': name,
                 'description': description,
-                'category': category
+                'is_private': category
              }
         }
         return self.make_request("collections/", "POST", payload=data)
