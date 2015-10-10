@@ -4,22 +4,20 @@ import os
 from setuptools import find_packages
 from setuptools import setup
 
-import bright
-
 with open('README.rst') as readme:
     long_description = readme.read()
 
 setup(
     name = "python-bright",
-    version = bright.__version__,
-    description = bright.__descr__,
+    version = "0.0.6",
+    description = "BRIGHT API wrapper",
     long_description = long_description,
-    author = bright.__author__,
-    author_email = bright.__author_mail__,
+    author = "Martin-Zack Mekkaoui",
+    author_email = "martin@brightfor.me",
     license = "MIT License",
-    url = bright.__url__,
-    keywords = bright.__keywords__,
-    classifiers = bright.__classifiers__,
+    url = "https://github.com/bright/python-bright/",
+    keywords = 'bright digital art',
+    classifiers = [],
     packages = find_packages(),
     include_package_data = True,
     install_requires=['requests>=2.7.0', 
