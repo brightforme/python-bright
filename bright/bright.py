@@ -274,3 +274,5 @@ class Bright(object):
         params = from_ and {"from": from_} or {}
         return self.make_request("artworks/flow", 'GET', params=params)
 
+    def get_notifications(self):
+        return self.make_request('me/notifications', "GET")
