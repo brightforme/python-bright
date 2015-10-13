@@ -38,6 +38,10 @@ class ServiceUnavailableError(BrightException):
     code = 503
     message = "Service is unavailable"
 
+class ConnectionTimeout(BrightException):
+    code = 522
+    message = "Connection timed out"
+
 
 def get_error(response):
     try:
