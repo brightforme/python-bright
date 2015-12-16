@@ -1,6 +1,9 @@
 python-bright
 =============
 
+.. image:: https://badge.fury.io/py/python-bright.svg
+    :target: https://badge.fury.io/py/python-bright
+
 Official Bright API wrapper
 
 Installation
