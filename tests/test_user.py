@@ -41,3 +41,11 @@ def test_update_me():
     unittest.assertIn("user", res)
     unittest.assertIn("screenname", res["user"])
     unittest.assertEquals(data["screenname"], res["user"]["screenname"])
+
+def test_update_user_403():
+    "Tes that we cannot update other users"
+    data = {
+      "screenname": "foobar"
+    }
+    with unittest.assertRaises(bright.Forbidden):
+        res = bright_api.update_user("test_user", data)
