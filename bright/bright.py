@@ -149,7 +149,7 @@ class Bright(object):
 
     def my_artworks(self, embedding=None, per_page=None, page=None):
         params = {
-            "page": page,
+            "page": page or 1,
             "per_page": per_page or 10,
             "embed": embedding
         }
@@ -174,7 +174,7 @@ class Bright(object):
 
     def get_all_artworks(self, per_page=None, page=None, embedding=None):
         params = {
-            "page": page,
+            "page": page or 1,
             "per_page": per_page or 10,
             "embed": embedding
         }
@@ -207,10 +207,10 @@ class Bright(object):
 
     def get_all_collections(self,per_page=None, page=None, embedding=None):
         params = {
-            "page": page,
+            "page": page or 1,
             "per_page": per_page or 10,
             "embed": embedding
-            }
+        }
         return self.make_request('collections/','GET', params=params)
 
     def update_collection(self, collection_id_or_slug, data=None):

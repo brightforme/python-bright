@@ -31,6 +31,20 @@ class CollectionTests(unittest.TestCase):
         for element in contents:
             self.assertIn(element, res["collection"])
 
+    def test_get_all_collections(self):
+        "Test we can get all collections"
+        contents = ['slug', 'thumbnail_url', 'is_private', 'name', 'artworks',
+                    'id', 'curator', 'description', 'draft']
+
+        res = self.bright_api.get_all_collections()
+
+        self.assertIn("pages", res)
+        self.assertIn("collections", res)
+
+        for collection in res["collections"]:
+            for element in contents:
+                self.assertIn(element, collection)
+
     def test_update_collection(self):
         "Test we can update a collection"
         data = {
