@@ -130,7 +130,7 @@ class Bright(object):
                                 allow_redirects=allow_redirects)
             r = raise_errors_on_failure(r)
 
-        if not r or not r["headers"]["Content-Type"] == "application/json":
+        if not r or not r.headers["Content-Type"] == "application/json":
             return {"message": "Got a bad response object"}
 
         return r.json()

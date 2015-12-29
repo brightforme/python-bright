@@ -8,6 +8,6 @@ if kwargs:
     kwargs = json.loads(kwargs)
 
 try:
-    from local_settings import *
+    from tests.local_settings import *
 except ImportError:
     pass
