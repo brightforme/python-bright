@@ -49,12 +49,14 @@ class UserTests(unittest.TestCase):
         data = {
           "screenname": "foobar"
         }
+        orig = self.bright_api.me()
         res = self.bright_api.update_me(data)
         self.assertEquals(res, {})
         res = self.bright_api.me()
         self.assertIn("user", res)
         self.assertIn("screenname", res["user"])
         self.assertEquals(data["screenname"], res["user"]["screenname"])
+        self.bright_api.update_me({"screenname": orig["user"]["screenname"]})
 
     def test_me_notifications(self):
         "Test that we can get our own notifications"
@@ -74,3 +76,13 @@ class UserTests(unittest.TestCase):
         res = self.bright_api.my_collections()
         self.assertIn("collections", res)
         self.assertIn("pages", res)
+
+    def test_follow(self):
+        "Test that we can follow a user"
+        # TODO
+        pass
+
+    def test_unfollow(self):
+        "Test that we can unfollow a user"
+        # TODO
+        pass

@@ -216,6 +216,7 @@ class Bright(object):
     def update_collection(self, collection_id_or_slug, data=None):
         if data is None:
             data = {}
+        print(collection_id_or_slug, data)
         data = { 'collection': data }
         uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri, 'PUT', payload=data)
