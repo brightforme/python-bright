@@ -102,7 +102,6 @@ class Bright(object):
             'Accept':'application/json',
             'Content-Type':'application/json'
         }
-        r = {}
         if method == 'GET':
             r = self.bright.get(self.api_url + endpoint,
                                 params=params,
@@ -130,6 +129,9 @@ class Bright(object):
                                 headers=headers,
                                 allow_redirects=allow_redirects)
             r = raise_errors_on_failure(r)
+
+        if not r or not r["headers"]["Content-Type"] == "application/json":
+            return {"message": "Got a bad response object"}
 
         return r.json()
 
