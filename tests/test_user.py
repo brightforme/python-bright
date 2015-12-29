@@ -10,7 +10,7 @@ class UserTests(unittest.TestCase):
 
     @classmethod
     def setupClass(self):
-        scopes = ["user:read", "user:write"]
+        scopes = ["user:read", "user:write", "artworks:read", "collections:read"]
         self.bright_api = bright.Bright(client_id=settings.client_id,
                                         client_secret=settings.client_secret,
                                         scopes=scopes,
@@ -45,7 +45,7 @@ class UserTests(unittest.TestCase):
             res = self.bright_api.get_user("this_user_does_not_exist")
 
     def test_update_me(self):
-        "Tes that we can update ourselves"
+        "Test that we can update ourselves"
         data = {
           "screenname": "foobar"
         }
@@ -55,3 +55,22 @@ class UserTests(unittest.TestCase):
         self.assertIn("user", res)
         self.assertIn("screenname", res["user"])
         self.assertEquals(data["screenname"], res["user"]["screenname"])
+
+    def test_me_notifications(self):
+        "Test that we can get our own notifications"
+        res = self.bright_api.me_notifications()
+        self.assertIn("notifications", res)
+        self.assertIn("read", res["notifications"])
+        self.assertIn("unread", res["notifications"])
+
+    def test_my_artworks(self):
+        "Test that we can get our own artworks"
+        res = self.bright_api.my_artworks()
+        self.assertIn("artworks", res)
+        self.assertIn("pages", res)
+
+    def test_my_collections(self):
+        "Test that we can get our own artworks"
+        res = self.bright_api.my_collections()
+        self.assertIn("collections", res)
+        self.assertIn("pages", res)
