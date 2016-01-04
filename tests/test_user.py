@@ -30,14 +30,12 @@ class UserTests(unittest.TestCase):
     def test_get_user(self):
         "Test that we can get another users profile"
         contents = ["cover_url", "picture_url", "fullname", "screenname", "bio",
-                    "accounts", "user_type", "counts"]
-        #tmp
-        with self.assertRaises(ResourceNotFound):
-            res = self.bright_api.get_user("test_user")
-            self.assertIn("user", res)
+                    "accounts", "user_type"]
+        res = self.bright_api.get_user("testuser")
+        self.assertIn("user", res)
 
-            for element in contents:
-                self.assertIn(element, res["user"])
+        for element in contents:
+            self.assertIn(element, res["user"])
 
     def test_get_user_404(self):
         "Test that we get an exception if the user does not exist"
