@@ -66,3 +66,11 @@ class ArtworkTests(unittest.TestCase):
         "Test that we can unlike an artwork"
         # TODO
         pass
+
+    def test_flow(self):
+        "Test that we can get our personalized flow"
+        contents = ["artworks", "oldest"]
+        res = self.bright_api.get_flow()
+
+        for element in contents:
+            self.assertIn(element, res)
