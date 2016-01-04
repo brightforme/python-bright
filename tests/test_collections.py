@@ -10,7 +10,8 @@ class CollectionTests(unittest.TestCase):
 
     @classmethod
     def setupClass(self):
-        scopes = ["collections:read", "collections:write", "artworks:read"]
+        scopes = ["collections:read", "collections:write", "collections:like",
+                  "artworks:read", "user:read"]
         self.bright_api = bright.Bright(client_id=settings.client_id,
                                         client_secret=settings.client_secret,
                                         scopes=scopes,
@@ -90,10 +91,29 @@ class CollectionTests(unittest.TestCase):
 
     def test_like_collection(self):
         "Test that we can like a collection"
-        # TODO
-        pass
+        own_id = self.bright_api.me()["user"]["id"]
+        all_collec = self.bright_api.get_all_collections()["collections"]
+        collec = list(filter(lambda c: not own_id in c["likes"], all_collec))[0]
+
+        res = self.bright_api.like_collection(collec["id"])
+        self.assertEquals({}, res)
+
+        res = self.bright_api.get_collection(collec["id"])
+        self.assertIn(own_id, res["collections"]["likes"])
+
+        self.bright_api.unlike_collection(collec["id"])
 
     def test_unlike_collection(self):
         "Test that we can unlike a collection"
-        # TODO
-        pass
+        own_id = self.bright_api.me()["user"]["id"]
+        all_collec = self.bright_api.get_all_collections()["collections"]
+        print(all_collec[0])
+        collec = list(filter(lambda c: own_id in c["likes"], all_collec))[0]
+
+        res = self.bright_api.unlike_collection(collec["id"])
+        self.assertEquals({}, res)
+
+        res = self.bright_api.get_collection(collec["id"])
+        self.assertNotIn(own_id, res["collections"]["likes"])
+
+        self.bright_api.like_collection(collec["id"])

@@ -76,21 +76,35 @@ class UserTests(unittest.TestCase):
         self.assertIn("collections", res)
         self.assertIn("pages", res)
 
-    # Follow/Unfollow depend on each other. Urgh
+    # Follow/Unfollow are interdependent. Urgh.
     def test_follow(self):
         "Test that we can follow a user"
+        own_id = self.bright_api.me()["user"]["id"]
         uid = self.bright_api.get_user("testuser")["user"]["id"]
 
         res = self.bright_api.follow_user(uid)
         self.assertEquals({}, res)
 
+        user = self.bright_api.get_user("testuser")["user"]
+        self.assertIn(own_id, [x["id"] for x in user["followers"]])
+
         self.bright_api.unfollow_user(uid)
 
     def test_unfollow(self):
         "Test that we can unfollow a user"
+        own_id = self.bright_api.me()["user"]["id"]
         uid = self.bright_api.get_user("testuser")["user"]["id"]
-        self.bright_api.follow_user(uid)
+
+        try:
+            self.bright_api.follow_user(uid)
+        except:
+            pass
+
+        user = self.bright_api.get_user("testuser")["user"]
+        self.assertIn(own_id, [x["id"] for x in user["followers"]])
 
         res = self.bright_api.unfollow_user(uid)
         self.assertEquals({}, res)
 
+        user = self.bright_api.get_user("testuser")["user"]
+        self.assertNotIn(own_id, [x["id"] for x in user["followers"]])
