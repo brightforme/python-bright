@@ -46,6 +46,29 @@ class CollectionTests(unittest.TestCase):
             for element in contents:
                 self.assertIn(element, collection)
 
+    def test_create_collection(self):
+        "Test we can create a collection"
+        contents = ['slug', 'thumbnail_url', 'is_private', 'name', 'artworks',
+                    'id', 'curator', 'description', 'draft']
+        res = self.bright_api.create_collection("test", "'tis but a test", False)
+        
+        for element in contents:
+            self.assertIn(element, res["collection"])
+
+        self.bright_api.delete_collection(res["collection"]["id"])
+
+    def test_delete_collection(self):
+        "Test we can delete a collection"
+        res = self.bright_api.create_collection("test", "'tis but a test", False)["collection"]
+        me = self.bright_api.my_collections()["collections"]
+
+        self.assertIn(res, me)
+        
+        self.bright_api.delete_collection(res["id"])
+        me = self.bright_api.my_collections()["collections"]
+
+        self.assertNotIn(res, me)
+
     def test_update_collection(self):
         "Test we can update a collection"
         data = {
