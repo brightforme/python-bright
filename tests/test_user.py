@@ -10,7 +10,8 @@ class UserTests(unittest.TestCase):
 
     @classmethod
     def setupClass(self):
-        scopes = ["user:read", "user:write", "artworks:read", "collections:read"]
+        scopes = ["user:read", "user:write", "user:follow", "artworks:read",
+                  "collections:read"]
         self.bright_api = bright.Bright(client_id=settings.client_id,
                                         client_secret=settings.client_secret,
                                         scopes=scopes,
@@ -75,12 +76,21 @@ class UserTests(unittest.TestCase):
         self.assertIn("collections", res)
         self.assertIn("pages", res)
 
+    # Follow/Unfollow depend on each other. Urgh
     def test_follow(self):
         "Test that we can follow a user"
-        # TODO
-        pass
+        uid = self.bright_api.get_user("testuser")["user"]["id"]
+
+        res = self.bright_api.follow_user(uid)
+        self.assertEquals({}, res)
+
+        self.bright_api.unfollow_user(uid)
 
     def test_unfollow(self):
         "Test that we can unfollow a user"
-        # TODO
-        pass
+        uid = self.bright_api.get_user("testuser")["user"]["id"]
+        self.bright_api.follow_user(uid)
+
+        res = self.bright_api.unfollow_user(uid)
+        self.assertEquals({}, res)
+
