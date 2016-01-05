@@ -57,9 +57,9 @@ class UserTests(unittest.TestCase):
         self.assertEquals(data["screenname"], res["user"]["screenname"])
         self.bright_api.update_me({"screenname": orig["user"]["screenname"]})
 
-    def test_me_notifications(self):
+    def test_my_notifications(self):
         "Test that we can get our own notifications"
-        res = self.bright_api.me_notifications()
+        res = self.bright_api.my_notifications()
         self.assertIn("notifications", res)
         self.assertIn("read", res["notifications"])
         self.assertIn("unread", res["notifications"])

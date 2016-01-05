@@ -155,7 +155,7 @@ class Bright(object):
         }
         return self.make_request('me/artworks', 'GET', params=params)
 
-    def me_notifications(self):
+    def my_notifications(self):
         return self.make_request('me/notifications', 'GET')
 
     def update_me(self, data=None):
