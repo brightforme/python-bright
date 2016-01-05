@@ -76,9 +76,6 @@ class CollectionTests(unittest.TestCase):
         }
         orig = self.bright_api.get_collection(self.own_collections[0]["id"])["collection"]
         res = self.bright_api.update_collection(orig["id"], data=data)
-        self.assertEquals({}, res)
-
-        res = self.bright_api.get_collection(self.own_collections[0]["id"])["collection"]
         self.assertEquals(data["name"], res["name"])
         self.bright_api.update_collection(orig["id"], {"name": orig["name"]})
 
