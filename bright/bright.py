@@ -155,6 +155,12 @@ class Bright(object):
         }
         return self.make_request('me/artworks', 'GET', params=params)
 
+    def my_devices(self):
+        return self.make_request('me/devices', 'GET')
+
+    def my_places(self):
+        return self.make_request('me/places', 'GET')
+
     def my_notifications(self):
         return self.make_request('me/notifications', 'GET')
 
@@ -163,6 +169,13 @@ class Bright(object):
             data = {}
         data = {'user': data}
         return self.make_request('me/', 'PUT', payload=data)
+
+    def get_place(self, _id, embedding=None):
+        uri = "places/{0}".format(_id)
+        params = {
+            "embed": embedding
+        }
+        return self.make_request(uri, 'GET')
 
     def get_artwork(self, id_or_slug, embedding=None, counts=None):
         uri = "artworks/{0}".format(id_or_slug)
@@ -180,6 +193,17 @@ class Bright(object):
         }
         return self.make_request('artworks/', 'GET', params=params)
 
+    def update_place(self, place_id, data=None):
+        if data is None:
+            data = {}
+        data = {'place': data}
+        uri = 'places/{0}'.format(place_id)
+        return self.make_request(uri, 'PUT', payload=data)
+
+    def delete_place(self, place_id):
+        uri = 'places/{0}'.format(place_id)
+        return self.make_request(uri,'DELETE')
+
     def update_artwork(self, artwork_id_or_slug, data=None):
         if data is None:
             data = {}
@@ -190,6 +214,16 @@ class Bright(object):
     def delete_artwork(self, artwork_id_or_slug):
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
         return self.make_request(uri,'DELETE')
+
+    #TODO: STUB
+    def create_place(self, name, description):
+        data = {
+            'place': {
+                'name': name,
+                'description': description
+             }
+        }
+        return self.make_request("places/", "POST", payload=data)
 
     def create_collection(self, name, description, category):
         data = {
