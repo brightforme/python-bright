@@ -215,12 +215,12 @@ class Bright(object):
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
         return self.make_request(uri,'DELETE')
 
-    #TODO: STUB
-    def create_place(self, name, description):
+    def create_place(self, name, latitude, longitude):
         data = {
             'place': {
                 'name': name,
-                'description': description
+                'latitude': latitude,
+                'longitude': longitude
              }
         }
         return self.make_request("places/", "POST", payload=data)
