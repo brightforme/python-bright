@@ -2,11 +2,10 @@ class BrightException(Exception):
     """ Base error. """
     code = None
 
-    def __init__(self, message, result=None):
+    def __init__(self, message="", result=None):
         super(BrightException, self).__init__(message)
         self.result = result
-        if message:
-            self.message = message
+        self.message = message
 
 class BadRequest(BrightException):
     code = 400

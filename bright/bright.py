@@ -38,7 +38,6 @@ class Bright(object):
                 "scope": self.scopes,
                 "token_type": "Bearer"
             })
-            return
 
         elif self._check_password_grant_type():
             token_url = "{0}{1}/oauth/token".format(self.scheme, self.host)
@@ -55,7 +54,6 @@ class Bright(object):
             except HTTPError as e:
                 raise_errors_on_failure(e.response)
 
-
         elif self._check_client_credentials_grant_type():
             token_url = "{0}{1}/oauth/token".format(self.scheme, self.host)
             client = BackendApplicationClient(self.client_id)
@@ -67,7 +65,6 @@ class Bright(object):
                                                             scope=self.scopes)
             except HTTPError as e:
                 raise_errors_on_failure(e.response)
-
 
     def _check_kwargs(self, required, kwargs):
         return reduce(lambda acc, k: k in kwargs and acc, required, True)
@@ -83,8 +80,8 @@ class Bright(object):
     def revoke(self):
         revoke_token_url = "{0}{1}/oauth/revoke".format(self.scheme, self.host)
         data = {
-                'token': self.access_token['access_token'],
-                'token_type_hint': "access_token"
+            'token': self.access_token['access_token'],
+            'token_type_hint': "access_token"
         }
         r = self.bright.post(revoke_token_url, data=data)
         r = raise_errors_on_failure(r)
@@ -129,6 +126,8 @@ class Bright(object):
                                 headers=headers,
                                 allow_redirects=allow_redirects)
             r = raise_errors_on_failure(r)
+        else:
+            raise ValueError("{} is not a supported method.".format(method))
 
         if not r or not r.headers["Content-Type"] == "application/json":
             return {"message": "Got a bad response object"}
@@ -253,7 +252,6 @@ class Bright(object):
     def update_collection(self, collection_id_or_slug, data=None):
         if data is None:
             data = {}
-        print(collection_id_or_slug, data)
         data = { 'collection': data }
         uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri, 'PUT', payload=data)
