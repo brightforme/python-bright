@@ -236,8 +236,11 @@ class Bright(object):
         return self.make_request("collections/", "POST", payload=data)
 
     def get_collection(self, collection_id_or_slug, embedding=None):
+        params = {
+            "embed": embedding
+        }
         uri = "collections/{0}".format(collection_id_or_slug)
-        return self.make_request(uri, 'GET', params=embedding)
+        return self.make_request(uri, 'GET', params=params)
 
     def get_all_collections(self,per_page=None, page=None, embedding=None):
         params = {
