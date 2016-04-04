@@ -20,9 +20,10 @@ class FilesTests(unittest.TestCase):
                     "filetype", "failure_reason", "torrent_url", "path_on_s3",
                     "path_for_frontend"]
 
-        first_artwork = self.bright_api.my_artworks()["artworks"][0]
+        artworks = self.bright_api.my_artworks()["artworks"]
+        first_file = list(filter(lambda a: len(a["files"]) > 0, artworks))[0][0]
 
-        res = self.bright_api.get_file(first_artwork["files"][0]["id"])
+        res = self.bright_api.get_file(first_file["id"])
         self.assertIn("file", res)
 
         for element in contents:

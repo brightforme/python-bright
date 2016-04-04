@@ -75,7 +75,7 @@ class CollectionTests(unittest.TestCase):
             "name": "foobar"
         }
         orig = self.bright_api.get_collection(self.own_collections[0]["id"])["collection"]
-        res = self.bright_api.update_collection(orig["id"], data=data)
+        res = self.bright_api.update_collection(orig["id"], data=data)["collection"]
         self.assertEquals(data["name"], res["name"])
         self.bright_api.update_collection(orig["id"], {"name": orig["name"]})
 
@@ -127,9 +127,9 @@ class CollectionTests(unittest.TestCase):
         "Test that we can unlike a collection"
         own_id = self.bright_api.me()["user"]["id"]
         all_collec = self.bright_api.get_all_collections()["collections"]
-        print(all_collec[0])
-        collec = list(filter(lambda c: own_id in c["likes"], all_collec))[0]
+        collec = list(filter(lambda c: not own_id in c["likes"], all_collec))[0]
 
+        _ = self.bright_api.like_collection(collec["id"])
         res = self.bright_api.unlike_collection(collec["id"])
         self.assertEquals({}, res)
 

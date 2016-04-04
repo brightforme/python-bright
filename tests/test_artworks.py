@@ -49,7 +49,8 @@ class ArtworkTests(unittest.TestCase):
     def test_update_artwork(self):
         "Test we can update an artwork"
         data = {
-            "name": "foobar"
+            "name": "foobar",
+            "tags": ["none"]
         }
         orig = self.bright_api.get_artwork(self.own_artworks[0]["id"])["artwork"]
         res = self.bright_api.update_artwork(orig["id"], data=data)
