@@ -263,7 +263,7 @@ class Bright(object):
     def add_to_collection(self, collection_id_or_slug, artwork_id):
         uri = "collections/{0}/artworks/".format(collection_id_or_slug)
         data = {
-            "artwork": artwork_id
+            "artwork": str(artwork_id)
         }
         return self.make_request(uri, 'POST',payload=data)
 
