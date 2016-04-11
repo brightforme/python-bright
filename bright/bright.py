@@ -260,17 +260,6 @@ class Bright(object):
         uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri, 'DELETE')
 
-    def add_to_collection(self, collection_id_or_slug, artwork_id):
-        uri = "collections/{0}/artworks/".format(collection_id_or_slug)
-        data = {
-            "artwork": str(artwork_id)
-        }
-        return self.make_request(uri, 'POST',payload=data)
-
-    def remove_from_collection(self, collection_id_or_slug, artwork_id):
-        uri = "collections/{0}/artworks/{1}".format(collection_id_or_slug, artwork_id)
-        return self.make_request(uri, 'DELETE')
-
     def like_collection(self, collection_id_or_slug):
         uri = "collections/{0}/like".format(collection_id_or_slug)
         return self.make_request(uri, 'POST')
