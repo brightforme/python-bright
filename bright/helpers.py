@@ -7,35 +7,45 @@ class BrightException(Exception):
         self.result = result
         self.message = message
 
+
 class BadRequest(BrightException):
     code = 400
+
 
 class AuthenticationError(BrightException):
     code = 401
 
+
 class Forbidden(BrightException):
     code = 403
+
 
 class TooManyRequests(BrightException):
     code = 429
 
+
 class ResourceNotFound(BrightException):
     code = 404
 
+
 class MethodNotAllowed(BrightException):
     code = 405
+
 
 class ServerError(BrightException):
     code = 500
     message = "Internal Server Error"
 
+
 class BadGatewayError(BrightException):
     code = 502
     message = "Bad Gateway"
 
+
 class ServiceUnavailableError(BrightException):
     code = 503
     message = "Service is unavailable"
+
 
 class ConnectionTimeout(BrightException):
     code = 522

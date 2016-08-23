@@ -12,7 +12,7 @@ from .__version__ import VERSION
 
 class Bright(object):
     use_ssl = True
-    api_version = "v1.1"
+    api_version = "v1.3"
     host = "api.brightfor.me"
     USER_AGENT = 'python-bright'
 
@@ -45,12 +45,12 @@ class Bright(object):
             self.bright = OAuth2Session(client=client)
             try:
                 self.access_token = self.bright.fetch_token(token_url,
-                                                        client_id=self.client_id,
-                                                        client_secret=self.options.get("client_secret"),
-                                                        username=kwargs.get("username"),
-                                                        password=kwargs.get("password"),
-                                                        scope=self.scopes,
-                                                       )
+                                                            client_id=self.client_id,
+                                                            client_secret=self.options.get("client_secret"),
+                                                            username=kwargs.get("username"),
+                                                            password=kwargs.get("password"),
+                                                            scope=self.scopes,
+                                                            )
             except HTTPError as e:
                 raise_errors_on_failure(e.response)
 
@@ -96,9 +96,10 @@ class Bright(object):
 
         headers = {
             'User-Agent': self.USER_AGENT,
-            'Accept':'application/json',
-            'Content-Type':'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         }
+
         if method == 'GET':
             r = self.bright.get(self.api_url + endpoint,
                                 params=params,
@@ -201,7 +202,7 @@ class Bright(object):
 
     def delete_place(self, place_id):
         uri = 'places/{0}'.format(place_id)
-        return self.make_request(uri,'DELETE')
+        return self.make_request(uri, 'DELETE')
 
     def update_artwork(self, artwork_id_or_slug, data=None):
         if data is None:
@@ -212,7 +213,7 @@ class Bright(object):
 
     def delete_artwork(self, artwork_id_or_slug):
         uri = 'artworks/{0}'.format(artwork_id_or_slug)
-        return self.make_request(uri,'DELETE')
+        return self.make_request(uri, 'DELETE')
 
     def create_place(self, name, latitude, longitude):
         data = {
@@ -220,7 +221,7 @@ class Bright(object):
                 'name': name,
                 'latitude': latitude,
                 'longitude': longitude
-             }
+            }
         }
         return self.make_request("places/", "POST", payload=data)
 
@@ -230,7 +231,7 @@ class Bright(object):
                 'name': name,
                 'description': description,
                 'is_private': category
-             }
+            }
         }
         return self.make_request("collections/", "POST", payload=data)
 
@@ -241,18 +242,18 @@ class Bright(object):
         uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri, 'GET', params=params)
 
-    def get_all_collections(self,per_page=None, page=None, embedding=None):
+    def get_all_collections(self, per_page=None, page=None, embedding=None):
         params = {
             "page": page or 1,
             "per_page": per_page or 10,
             "embed": embedding
         }
-        return self.make_request('collections/','GET', params=params)
+        return self.make_request('collections/', 'GET', params=params)
 
     def update_collection(self, collection_id_or_slug, data=None):
         if data is None:
             data = {}
-        data = { 'collection': data }
+        data = {'collection': data}
         uri = "collections/{0}".format(collection_id_or_slug)
         return self.make_request(uri, 'PUT', payload=data)
 
