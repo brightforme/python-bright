@@ -20,7 +20,7 @@ class UserTests(unittest.TestCase):
 
     def test_get_me(self):
         "Test we can get our own profile"
-        contents = ["cover_url", "picture_url", "fullname", "screenname", "bio",
+        contents = ["picture_url", "fullname", "screenname", "bio",
                     "accounts", "user_type", "accounts", "artworks", "collections"]
         res = self.bright_api.me()
         self.assertIn("user", res)
@@ -30,7 +30,7 @@ class UserTests(unittest.TestCase):
 
     def test_get_user(self):
         "Test that we can get another users profile"
-        contents = ["cover_url", "picture_url", "fullname", "screenname", "bio",
+        contents = ["picture_url", "fullname", "screenname", "bio",
                     "accounts", "user_type"]
         res = self.bright_api.get_user("testuser")
         self.assertIn("user", res)
