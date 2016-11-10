@@ -161,9 +161,6 @@ class Bright(object):
     def my_places(self):
         return self.make_request('me/places', 'GET')
 
-    def my_notifications(self):
-        return self.make_request('me/notifications', 'GET')
-
     def update_me(self, data=None):
         if data is None:
             data = {}
